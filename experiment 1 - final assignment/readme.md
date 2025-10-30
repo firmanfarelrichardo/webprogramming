@@ -1,7 +1,5 @@
 # Portofolio — Firman Farel Richardo
 
-[view original:](https://firmanfarelrichardo.github.io/)
-
 Halaman portofolio statis yang dibuat dengan HTML & CSS. Menampilkan profil singkat, pendidikan, skill, daftar proyek, dan kontak. Tata letak menggunakan sidebar navigasi yang responsif dan area konten utama dengan section: Home, About, Education, Skill, Portfolio, Contact.
 
 ## Isi Repository
