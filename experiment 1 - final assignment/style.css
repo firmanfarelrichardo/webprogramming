@@ -1,3 +1,4 @@
+/* ========== Variables / Root ========== */
 :root {
     --sidebar-width: 280px;
     --bg-color: #f8f9fa;
@@ -8,6 +9,7 @@
     --accent-color: #007bff;
 }
 
+/* ========== Reset & Base ========== */
 * {
     box-sizing: border-box;
 }
@@ -24,6 +26,7 @@ html, body {
     line-height: 1.6;
 }
 
+/* ========== Sidebar (navigasi samping) ========== */
 .sidebar {
     position: fixed;
     left: 0;
@@ -40,11 +43,13 @@ html, body {
     overflow-y: hidden;
 }
 
+/* ========== Main layout ========== */
 .main-content {
     margin-left: var(--sidebar-width);
     padding: 2rem;
 }
 
+/* ========== Profile (sidebar) ========== */
 .profile-img {
     width: 120px;
     height: 120px;
@@ -60,6 +65,7 @@ html, body {
     margin-bottom: 2.0rem;
 }
 
+/* ========== Navigation links (sidebar) ========== */
 .main-nav {
     display: flex;
     flex-direction: column;
@@ -89,6 +95,7 @@ html, body {
     color: var(--text-color);
 }
 
+/* ========== Sidebar footer (social links) ========== */
 .sidebar-footer {
     margin-top: auto;
     padding-top: 1.5rem;
@@ -104,6 +111,7 @@ html, body {
     color: var(--text-color);
 }
 
+/* ========== Card / Section base styling ========== */
 .card {
     background-color: var(--card-color);
     border: 1px solid var(--border-color);
@@ -134,6 +142,7 @@ html, body {
     margin-bottom: 1rem;
 }
 
+/* ========== Hero / Home Section ========== */
 .hero-section {
     display: flex;
     min-height: 100vh;
@@ -192,7 +201,7 @@ html, body {
     border-color: var(--muted-color);
 }
 
-
+/* ========== About Section ========== */
 .about-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -208,10 +217,7 @@ html, body {
     text-align: justify;
 }
 
-
-
-
-
+/* ========== Skill badges ========== */
 .skill-badge-container {
     display: flex;
     flex-wrap: wrap;
@@ -226,6 +232,7 @@ html, body {
     font-weight: 500;
 }
 
+/* ========== Education Section ========== */
 .education-list {
     display: flex;
     flex-direction: column;
@@ -254,6 +261,7 @@ html, body {
 }
 .education-details { margin: 0; }
 
+/* ========== Portfolio Section ========== */
 .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -286,6 +294,7 @@ html, body {
     margin: 0 1.25rem 1.25rem;
 }
 
+/* ========== Contact Section ========== */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 2fr; 
@@ -344,6 +353,7 @@ html, body {
     flex-wrap: wrap; 
 }
 
+/* ========== Responsive / Media Queries ========== */
 @media (max-width: 992px) {
     .sidebar {
         position: relative;
