@@ -1,14 +1,14 @@
-# Portofolio — Firman Farel Richardo (Versi Murni)
+# Portofolio — Firman Farel Richardo
 
-Halaman portofolio statis yang dibuat dengan HTML & CSS murni. Menampilkan profil singkat, pendidikan, skill, daftar proyek, dan kontak. Tata letak menggunakan sidebar navigasi yang responsif dan area konten utama dengan section: Home, About, Education, Skill, Portfolio, Contact.
+Halaman portofolio statis yang dibuat dengan HTML & CSS. Menampilkan profil singkat, pendidikan, skill, daftar proyek, dan kontak. Tata letak menggunakan sidebar navigasi yang responsif dan area konten utama dengan section: Home, About, Education, Skill, Portfolio, Contact.
 
-## Isi Proyek
+## Isi Repository
 * `index.html` — struktur halaman (sidebar + main content)
 * `style.css` — seluruh styling (variables, sidebar, hero, section card, responsive)
 * `assets/` — gambar dan aset proyek (termasuk `profile.jpg` dan `bw.png`)
 * `screenshot/` — gambar-gambar screenshot halaman
 
-## Fitur Utama (sesuai HTML & CSS)
+## Fitur Utama 
 * Sidebar tetap (fixed) berisi foto, nama, navigasi, dan tautan sosial.
 * Section "Home" (hero) memenuhi area layar (full-height), menampilkan judul, deskripsi, tombol aksi, dan gambar hero.
 * Section "About" berisi profil & soft-skill dalam layout 2 kolom.
@@ -48,7 +48,7 @@ Berikut adalah tampilan dari setiap bagian utama halaman portofolio.
 
 ---
 
-## Struktur Singkat HTML (Section Utama)
+## Struktur Singkat HTML
 * `aside.sidebar`
     * `img.profile-img`
     * `h1.profile-name`
