@@ -1,0 +1,25 @@
+Percobaan 2-6: Collaboration dan Conflict Resolution
+
+## Simulasi perubahan dari remote:
+Edit file langsung di GitHub
+Commit perubahan di web interface
+
+
+## Pull perubahan ke local:
+git pull origin main
+
+
+## Buat perubahan lokal yang bertentangan:
+Edit baris yang sama di file lokal
+Commit perubahan lokal
+
+
+Pull perubahan ke local:
+git push origin main  # akan error
+git pull origin main  # akan ada conflict
+
+
+## Resolve conflict dan commit:
+Edit file yang conflict
+Hapus conflict markers (<<<<<<<, =======, >>>>>>>)
+Add dan commit hasil resolve
