@@ -1,0 +1,50 @@
+Percobaan 2-5: Branching dan Merging
+
+## Buat branch baru untuk feature:
+git branch feature-navigation
+git checkout feature-navigation
+# atau gunakan: git checkout -b feature-navigation
+
+
+## Tambah navigation di index.html:
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <h1>Hello Git!</h1>
+    <p>This is my first project with version control.</p>
+</body>
+
+
+## Update CSS untuk navigation:
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #007acc;
+}
+
+
+## Commit di feature branch:
+git add .
+git commit -m "Add navigation menu"
+
+
+## Merge ke main branch:
+git checkout main
+git merge feature-navigation
+git branch -d feature-navigation
+
+
