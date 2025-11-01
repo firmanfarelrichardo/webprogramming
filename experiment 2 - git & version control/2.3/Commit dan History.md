@@ -1,12 +1,18 @@
-Percobaan 2-3: Commit dan History
+# 2.3 - Commit dan History
 
-## Commit pertama:
+## Commit Pertama
+
+```bash
 git commit -m "Initial commit: Add index.html"
 git log
 git log --oneline
+```
 
+## Tambah File CSS
 
-## Tambah file CSS:
+Buat file `style.css`:
+
+```css
 /* style.css */
 body {
     font-family: Arial, sans-serif;
@@ -17,18 +23,23 @@ body {
 h1 {
     color: #333;
 }
+```
 
+## Update index.html
 
-## Update index.html untuk link CSS:
+Tambahkan link CSS di `<head>`:
+
+```html
 <head>
     <title>My First Git Project</title>
     <link rel="stylesheet" href="style.css">
 </head>
+```
 
+## Commit Perubahan
 
-## Commit perubahan:
+```bash
 git add .
 git commit -m "Add CSS styling and link to index.html"
 git log --oneline
-
-
+```

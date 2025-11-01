@@ -1,16 +1,23 @@
-Percobaan 2-2: Membuat Repository Lokal
+# 2.2 - Membuat Repository Lokal
 
-## Buat direktori project baru:
+## Langkah-langkah
+
+### 1. Buat direktori project baru
+```bash
 mkdir my-web-project
 cd my-web-project
+```
 
-
-## Inisialisasi Git repository:
+### 2. Inisialisasi Git repository
+```bash
 git init
 ls -la  # lihat folder .git yang terbentuk
+```
 
+### 3. Buat file HTML sederhana
+Buat file `index.html`:
 
-## Buat file HTML sederhana:
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,12 +28,11 @@ ls -la  # lihat folder .git yang terbentuk
     <p>This is my first project with version control.</p>
 </body>
 </html>
+```
 
-
-## Check status dan add file:
+### 4. Check status dan add file
+```bash
 git status
 git add index.html
 git status
-
-
-
+```
