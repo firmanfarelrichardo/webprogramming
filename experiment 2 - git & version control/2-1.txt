@@ -1,0 +1,5 @@
+Percobaan 2-1: Instalasi dan Konfigurasi Git
+
+git config --global user.name "Nama Anda"
+git config --global user.email "email@example.com"
+git config --list
