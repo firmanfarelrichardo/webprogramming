@@ -1,0 +1,32 @@
+Percobaan 2-2: Membuat Repository Lokal
+
+## Buat direktori project baru:
+mkdir my-web-project
+cd my-web-project
+
+
+## Inisialisasi Git repository:
+git init
+ls -la  # lihat folder .git yang terbentuk
+
+
+## Buat file HTML sederhana:
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First Git Project</title>
+</head>
+<body>
+    <h1>Hello Git!</h1>
+    <p>This is my first project with version control.</p>
+</body>
+</html>
+
+
+## Check status dan add file:
+git status
+git add index.html
+git status
+
+
+
