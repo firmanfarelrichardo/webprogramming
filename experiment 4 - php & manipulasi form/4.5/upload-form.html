@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload File</title>
+</head>
+<body>
+    <h2>Upload File</h2>
+    <form action="upload-process.php" method="POST" enctype="multipart/form-data">
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" name="nama" required><br><br>
+        
+        <label for="file">Pilih File (jpg, png, gif, pdf - max 2MB):</label>
+        <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.gif,.pdf" required><br><br>
+        
+        <label for="deskripsi">Deskripsi File:</label><br>
+        <textarea id="deskripsi" name="deskripsi" rows="3" cols="50"></textarea><br><br>
+        
+        <input type="submit" value="Upload File" name="submit">
+    </form>
+</body>
+</html>

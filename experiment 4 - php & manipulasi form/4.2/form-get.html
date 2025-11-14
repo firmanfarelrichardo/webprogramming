@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Form GET Method</title>
+</head>
+<body>
+    <h2>Form Pencarian (GET Method)</h2>
+    <form action="process-get.php" method="GET">
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" name="nama" required><br><br>
+        
+        <label for="kota">Kota:</label>
+        <select id="kota" name="kota">
+            <option value="">Pilih Kota</option>
+            <option value="jakarta">Jakarta</option>
+            <option value="bandung">Bandung</option>
+            <option value="surabaya">Surabaya</option>
+        </select><br><br>
+        
+        <label for="hobi">Hobi:</label><br>
+        <input type="checkbox" id="musik" name="hobi[]" value="musik">
+        <label for="musik">Musik</label><br>
+        <input type="checkbox" id="olahraga" name="hobi[]" value="olahraga">
+        <label for="olahraga">Olahraga</label><br>
+        <input type="checkbox" id="membaca" name="hobi[]" value="membaca">
+        <label for="membaca">Membaca</label><br><br>
+        
+        <input type="submit" value="Cari">
+    </form>
+</body>
+</html>
