@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List App</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .container { background: #f9f9f9; padding: 20px; border-radius: 10px; }
+        .input-group { display: flex; margin-bottom: 20px; }
+        .input-group input { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px 0 0 5px; }
+        .input-group button { padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
+        .input-group button:hover { background: #0056b3; }
+        .todo-item { display: flex; align-items: center; padding: 10px; margin: 5px 0; background: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .todo-item.completed { opacity: 0.6; text-decoration: line-through; }
+        .todo-item input[type="checkbox"] { margin-right: 10px; }
+        .todo-item .text { flex: 1; }
+        .todo-item .delete-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .todo-item .delete-btn:hover { background: #c82333; }
+        .stats { display: flex; justify-content: space-between; margin-top: 20px; padding: 10px; background: #e9ecef; border-radius: 5px; }
+        .filter-buttons { text-align: center; margin: 10px 0; }
+        .filter-buttons button { margin: 0 5px; padding: 5px 15px; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 3px; }
+        .filter-buttons button.active { background: #007bff; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Todo List App</h1>
+        
+        <div class="input-group">
+            <input type="text" id="todoInput" placeholder="Tambahkan task baru..." maxlength="50">
+            <button onclick="addTodo()">Tambah</button>
+        </div>
+        
+        <div class="filter-buttons">
+            <button id="filterAll" class="active" onclick="filterTodos('all')">Semua</button>
+            <button id="filterActive" onclick="filterTodos('active')">Aktif</button>
+            <button id="filterCompleted" onclick="filterTodos('completed')">Selesai</button>
+        </div>
+        
+        <div id="todoList"></div>
+        
+        <div class="stats">
+            <span>Total: <span id="totalCount">0</span></span>
+            <span>Aktif: <span id="activeCount">0</span></span>
+            <span>Selesai: <span id="completedCount">0</span></span>
+        </div>
+        
+        <div style="text-align: center; margin-top: 15px;">
+            <button onclick="clearCompleted()" style="background: #ffc107; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+                Hapus yang Selesai
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        let todos = [];
+        let todoId = 1;
+        let currentFilter = 'all';
+        
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+            
+            if (text === '') {
+                alert('Mohon masukkan task!');
+                return;
+            }
+            
+            const todo = {
+                id: todoId++,
+                text: text,
+                completed: false,
+                createdAt: new Date()
+            };
+            
+            todos.push(todo);
+            input.value = '';
+            renderTodos();
+            updateStats();
+        }
+        
+        function toggleTodo(id) {
+            todos = todos.map(todo => 
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            );
+            renderTodos();
+            updateStats();
+        }
+        
+        function deleteTodo(id) {
+            if (confirm('Yakin ingin menghapus task ini?')) {
+                todos = todos.filter(todo => todo.id !== id);
+                renderTodos();
+                updateStats();
+            }
+        }
+        
+        function renderTodos() {
+            const todoList = document.getElementById('todoList');
+            
+            let filteredTodos = todos;
+            
+            if (currentFilter === 'active') {
+                filteredTodos = todos.filter(todo => !todo.completed);
+            } else if (currentFilter === 'completed') {
+                filteredTodos = todos.filter(todo => todo.completed);
+            }
+            
+            if (filteredTodos.length === 0) {
+                todoList.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">Tidak ada task</div>';
+                return;
+            }
+            
+            todoList.innerHTML = filteredTodos.map(todo => `
+                <div class="todo-item ${todo.completed ? 'completed' : ''}">
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                           onchange="toggleTodo(${todo.id})">
+                    <span class="text">${todo.text}</span>
+                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">Hapus</button>
+                </div>
+            `).join('');
+        }
+        
+        function updateStats() {
+            const total = todos.length;
+            const completed = todos.filter(todo => todo.completed).length;
+            const active = total - completed;
+            
+            document.getElementById('totalCount').innerText = total;
+            document.getElementById('activeCount').innerText = active;
+            document.getElementById('completedCount').innerText = completed;
+        }
+        
+        function filterTodos(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-buttons button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).classList.add('active');
+            
+            renderTodos();
+        }
+        
+        function clearCompleted() {
+            const completedCount = todos.filter(todo => todo.completed).length;
+            
+            if (completedCount === 0) {
+                alert('Tidak ada task yang selesai untuk dihapus');
+                return;
+            }
+            
+            if (confirm(`Hapus ${completedCount} task yang sudah selesai?`)) {
+                todos = todos.filter(todo => !todo.completed);
+                renderTodos();
+                updateStats();
+            }
+        }
+        
+        document.getElementById('todoInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addTodo();
+            }
+        });
+        
+        renderTodos();
+        updateStats();
+    </script>
+</body>
+</html>

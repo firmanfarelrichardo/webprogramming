@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript Functions</title>
+</head>
+<body>
+    <h2>Demonstrasi Fungsi JavaScript</h2>
+    
+    <div>
+        <label>Nama: </label>
+        <input type="text" id="nama" placeholder="Masukkan nama">
+        <button onclick="sapaNama()">Sapa</button>
+    </div>
+    <div id="greeting"></div>
+    
+    <div style="margin-top: 20px;">
+        <label>Angka 1: </label>
+        <input type="number" id="num1">
+        <label>Angka 2: </label>
+        <input type="number" id="num2">
+        <button onclick="hitung()">Hitung</button>
+    </div>
+    <div id="result"></div>
+    
+    <script>
+        function sapaNama() {
+            const nama = document.getElementById("nama").value;
+            const pesan = buatSapaan(nama);
+            document.getElementById("greeting").innerHTML = pesan;
+        }
+        
+        function buatSapaan(nama) {
+            if (nama === "") {
+                return "<p style='color: red;'>Nama tidak boleh kosong!</p>";
+            }
+            return `<p style='color: green;'>Halo, ${nama}! Selamat datang.</p>`;
+        }
+        
+        const tambah = (a, b) => a + b;
+        const kurang = (a, b) => a - b;
+        const kali = (a, b) => a * b;
+        const bagi = (a, b) => b !== 0 ? a / b : "Tidak bisa dibagi nol";
+        
+        function hitung() {
+            const num1 = parseFloat(document.getElementById("num1").value);
+            const num2 = parseFloat(document.getElementById("num2").value);
+            
+            if (isNaN(num1) || isNaN(num2)) {
+                document.getElementById("result").innerHTML = 
+                    "<p style='color: red;'>Masukkan angka yang valid!</p>";
+                return;
+            }
+            
+            const hasil = `
+                <div style='background: #f0f0f0; padding: 10px; margin-top: 10px;'>
+                    <h4>Hasil Perhitungan:</h4>
+                    <p>Tambah: ${num1} + ${num2} = ${tambah(num1, num2)}</p>
+                    <p>Kurang: ${num1} - ${num2} = ${kurang(num1, num2)}</p>
+                    <p>Kali: ${num1} × ${num2} = ${kali(num1, num2)}</p>
+                    <p>Bagi: ${num1} ÷ ${num2} = ${bagi(num1, num2)}</p>
+                </div>
+            `;
+            document.getElementById("result").innerHTML = hasil;
+        }
+    </script>
+</body>
+</html>

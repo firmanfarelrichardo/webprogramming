@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Manipulasi DOM</title>
+    <style>
+        .highlight { background-color: yellow; }
+        .big-text { font-size: 24px; }
+        .red-text { color: red; }
+        .box { 
+            width: 100px; 
+            height: 100px; 
+            border: 1px solid #ccc; 
+            margin: 10px; 
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h2>Manipulasi DOM dengan JavaScript</h2>
+    
+    <div>
+        <h3>1. Mengubah Konten Teks</h3>
+        <p id="demo-text">Teks original</p>
+        <button onclick="ubahTeks()">Ubah Teks</button>
+        <button onclick="resetTeks()">Reset</button>
+    </div>
+    
+    <div>
+        <h3>2. Mengubah Style</h3>
+        <p id="demo-style">Paragraf ini akan diubah stylenya</p>
+        <button onclick="ubahStyle()">Ubah Style</button>
+        <button onclick="resetStyle()">Reset Style</button>
+    </div>
+    
+    <div>
+        <h3>3. Manipulasi Class</h3>
+        <p id="demo-class">Teks dengan class dinamis</p>
+        <button onclick="toggleHighlight()">Toggle Highlight</button>
+        <button onclick="toggleBigText()">Toggle Big Text</button>
+    </div>
+    
+    <div>
+        <h3>4. Menambah/Hapus Elemen</h3>
+        <div id="container"></div>
+        <button onclick="tambahBox()">Tambah Box</button>
+        <button onclick="hapusBox()">Hapus Box</button>
+    </div>
+    
+    <script>
+        let boxCount = 0;
+        
+        function ubahTeks() {
+            const element = document.getElementById("demo-text");
+            element.innerText = "Teks telah diubah dengan JavaScript!";
+        }
+        
+        function resetTeks() {
+            document.getElementById("demo-text").innerText = "Teks original";
+        }
+        
+        function ubahStyle() {
+            const element = document.getElementById("demo-style");
+            element.style.color = "blue";
+            element.style.fontSize = "20px";
+            element.style.fontWeight = "bold";
+            element.style.backgroundColor = "#f0f0f0";
+        }
+        
+        function resetStyle() {
+            const element = document.getElementById("demo-style");
+            element.style.color = "";
+            element.style.fontSize = "";
+            element.style.fontWeight = "";
+            element.style.backgroundColor = "";
+        }
+        
+        function toggleHighlight() {
+            const element = document.getElementById("demo-class");
+            element.classList.toggle("highlight");
+        }
+        
+        function toggleBigText() {
+            const element = document.getElementById("demo-class");
+            element.classList.toggle("big-text");
+        }
+        
+        function tambahBox() {
+            boxCount++;
+            const container = document.getElementById("container");
+            const newBox = document.createElement("div");
+            newBox.className = "box";
+            newBox.style.backgroundColor = getRandomColor();
+            newBox.innerText = boxCount;
+            newBox.id = "box-" + boxCount;
+            container.appendChild(newBox);
+        }
+        
+        function hapusBox() {
+            if (boxCount > 0) {
+                const boxToRemove = document.getElementById("box-" + boxCount);
+                boxToRemove.remove();
+                boxCount--;
+            }
+        }
+        
+        function getRandomColor() {
+            const colors = ["#ffcccb", "#add8e6", "#90ee90", "#ffa07a", "#dda0dd"];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
+</body>
+</html>
