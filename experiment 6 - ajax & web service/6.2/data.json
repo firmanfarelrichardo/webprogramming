@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "city": "Jakarta"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "city": "Bandung"
+    },
+    {
+      "id": 3,
+      "name": "Bob Wilson",
+      "email": "bob@example.com",
+      "city": "Surabaya"
+    }
+  ],
+  "status": "success",
+  "message": "Data berhasil diambil"
+}

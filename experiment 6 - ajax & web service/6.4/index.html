@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-time Data Update</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .widget { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .widget h3 { margin-top: 0; color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .control-panel { background: #343a40; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .control-panel button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .control-panel button.danger { background: #dc3545; }
+        .control-panel button.success { background: #28a745; }
+        .status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .status-indicator.online { background: #28a745; }
+        .status-indicator.offline { background: #dc3545; }
+        .data-item { padding: 10px; margin: 5px 0; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #007bff; }
+        .timestamp { color: #666; font-size: 12px; }
+        .metric { text-align: center; }
+        .metric-value { font-size: 2em; font-weight: bold; color: #007bff; }
+        .chart-container { height: 200px; background: #f8f9fa; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+    <h1>📊 Real-time Data Dashboard</h1>
+    
+    <div class="control-panel">
+        <h3>🎛️ Control Panel</h3>
+        <span class="status-indicator" id="connectionStatus"></span>
+        <span id="connectionText">Offline</span>
+        
+        <div style="margin-top: 15px;">
+            <button onclick="startRealTimeUpdates()" class="success">Start Updates</button>
+            <button onclick="stopRealTimeUpdates()" class="danger">Stop Updates</button>
+            <button onclick="fetchManualUpdate()">Manual Update</button>
+            <button onclick="clearAllData()">Clear Data</button>
+        </div>
+        
+        <div style="margin-top: 10px;">
+            <label>Update Interval: </label>
+            <select id="intervalSelect" onchange="changeInterval()">
+                <option value="1000">1 second</option>
+                <option value="3000" selected>3 seconds</option>
+                <option value="5000">5 seconds</option>
+                <option value="10000">10 seconds</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="dashboard">
+        <div class="widget">
+            <h3>📈 Live Statistics</h3>
+            <div class="metric">
+                <div class="metric-value" id="visitorCount">0</div>
+                <div>Online Visitors</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="pageViews">0</div>
+                <div>Page Views</div>
+            </div>
+            <div class="timestamp" id="statsLastUpdate">Last update: Never</div>
+        </div>
+        
+        <div class="widget">
+            <h3>🔔 Recent Activities</h3>
+            <div id="activities">
+                <p style="text-align: center; color: #666;">No activities yet</p>
+            </div>
+        </div>
+        
+        <div class="widget">
+            <h3>⚡ System Status</h3>
+            <div id="systemStatus">
+                <div class="data-item">
+                    <strong>Server:</strong> <span id="serverStatus">Unknown</span>
+                </div>
+                <div class="data-item">
+                    <strong>Database:</strong> <span id="dbStatus">Unknown</span>
+                </div>
+                <div class="data-item">
+                    <strong>API:</strong> <span id="apiStatus">Unknown</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="widget">
+            <h3>Data Visualization</h3>
+            <div class="chart-container" id="dataChart">
+                <p>Chart will appear here</p>
+            </div>
+            <div class="timestamp" id="chartLastUpdate">Last update: Never</div>
+        </div>
+    </div>
+    
+    <script>
+        let updateInterval;
+        let isUpdating = false;
+        let currentInterval = 3000;
+        let activities = [];
+        let chartData = [];
+        
+        function startRealTimeUpdates() {
+            if (isUpdating) return;
+            
+            isUpdating = true;
+            updateConnectionStatus(true);
+            
+            fetchAllData();
+            
+            updateInterval = setInterval(fetchAllData, currentInterval);
+            
+            addActivity('Real-time updates started');
+        }
+        
+        function stopRealTimeUpdates() {
+            if (!isUpdating) return;
+            
+            isUpdating = false;
+            updateConnectionStatus(false);
+            
+            if (updateInterval) {
+                clearInterval(updateInterval);
+                updateInterval = null;
+            }
+            
+            addActivity('Real-time updates stopped');
+        }
+        
+        function changeInterval() {
+            const select = document.getElementById('intervalSelect');
+            currentInterval = parseInt(select.value);
+            
+            if (isUpdating) {
+                stopRealTimeUpdates();
+                setTimeout(startRealTimeUpdates, 100);
+            }
+            
+            addActivity(`Update interval changed to ${currentInterval/1000} seconds`);
+        }
+        
+        function updateConnectionStatus(online) {
+            const indicator = document.getElementById('connectionStatus');
+            const text = document.getElementById('connectionText');
+            
+            if (online) {
+                indicator.className = 'status-indicator online';
+                text.textContent = 'Online - Receiving updates';
+            } else {
+                indicator.className = 'status-indicator offline';
+                text.textContent = 'Offline';
+            }
+        }
+        
+        async function fetchAllData() {
+            try {
+                await Promise.all([
+                    fetchStatistics(),
+                    fetchSystemStatus(),
+                    updateChart()
+                ]);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                addActivity('Error fetching data: ' + error.message);
+            }
+        }
+        
+        async function fetchStatistics() {
+            try {
+                const stats = {
+                    visitors: Math.floor(Math.random() * 100) + 50,
+                    pageViews: Math.floor(Math.random() * 1000) + 200,
+                    timestamp: new Date().toLocaleTimeString()
+                };
+                
+                document.getElementById('visitorCount').textContent = stats.visitors;
+                document.getElementById('pageViews').textContent = stats.pageViews;
+                document.getElementById('statsLastUpdate').textContent = 'Last update: ' + stats.timestamp;
+                
+            } catch (error) {
+                throw new Error('Statistics fetch failed');
+            }
+        }
+        
+        async function fetchSystemStatus() {
+            try {
+                const statuses = ['Online', 'Warning', 'Error'];
+                const colors = ['green', 'orange', 'red'];
+                
+                const serverStatus = Math.random() > 0.1 ? 'Online' : 'Warning';
+                const dbStatus = Math.random() > 0.05 ? 'Online' : 'Error';
+                const apiStatus = Math.random() > 0.08 ? 'Online' : 'Warning';
+                
+                document.getElementById('serverStatus').innerHTML = 
+                    `<span style="color: ${serverStatus === 'Online' ? 'green' : 'orange'}">${serverStatus}</span>`;
+                document.getElementById('dbStatus').innerHTML = 
+                    `<span style="color: ${dbStatus === 'Online' ? 'green' : 'red'}">${dbStatus}</span>`;
+                document.getElementById('apiStatus').innerHTML = 
+                    `<span style="color: ${apiStatus === 'Online' ? 'green' : 'orange'}">${apiStatus}</span>`;
+                
+            } catch (error) {
+                throw new Error('System status fetch failed');
+            }
+        }
+        
+        function updateChart() {
+            const now = new Date();
+            const value = Math.floor(Math.random() * 100);
+            
+            chartData.push({
+                time: now.toLocaleTimeString(),
+                value: value
+            });
+            
+            if (chartData.length > 10) {
+                chartData.shift();
+            }
+            
+            const chartContainer = document.getElementById('dataChart');
+            let chartHTML = '<div style="display: flex; align-items: end; height: 150px; padding: 20px;">';
+            
+            chartData.forEach((point, index) => {
+                const height = (point.value / 100) * 120;
+                chartHTML += `
+                    <div style="
+                        width: 20px; 
+                        height: ${height}px; 
+                        background: #007bff; 
+                        margin: 0 2px; 
+                        border-radius: 2px;
+                        position: relative;
+                    " title="${point.time}: ${point.value}"></div>
+                `;
+            });
+            
+            chartHTML += '</div>';
+            chartContainer.innerHTML = chartHTML;
+            
+            document.getElementById('chartLastUpdate').textContent = 'Last update: ' + now.toLocaleTimeString();
+        }
+        
+        function addActivity(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            activities.unshift({
+                message: message,
+                timestamp: timestamp
+            });
+            
+            if (activities.length > 5) {
+                activities.pop();
+            }
+            
+            updateActivitiesDisplay();
+        }
+        
+        function updateActivitiesDisplay() {
+            const container = document.getElementById('activities');
+            
+            if (activities.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">No activities yet</p>';
+                return;
+            }
+            
+            let html = '';
+            activities.forEach(activity => {
+                html += `
+                    <div class="data-item">
+                        <div>${activity.message}</div>
+                        <div class="timestamp">${activity.timestamp}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function fetchManualUpdate() {
+            fetchAllData();
+            addActivity('Manual update triggered');
+        }
+        
+        function clearAllData() {
+            activities = [];
+            chartData = [];
+            
+            document.getElementById('visitorCount').textContent = '0';
+            document.getElementById('pageViews').textContent = '0';
+            document.getElementById('statsLastUpdate').textContent = 'Last update: Never';
+            document.getElementById('chartLastUpdate').textContent = 'Last update: Never';
+            
+            document.getElementById('dataChart').innerHTML = '<p>Chart will appear here</p>';
+            updateActivitiesDisplay();
+            
+            addActivity('All data cleared');
+        }
+        
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && isUpdating) {
+                console.log('Page hidden, pausing updates');
+            } else if (!document.hidden && isUpdating) {
+                console.log('Page visible, resuming updates');
+                fetchAllData();
+            }
+        });
+        
+        window.addEventListener('load', function() {
+            addActivity('Dashboard initialized');
+            updateConnectionStatus(false);
+        });
+    </script>
+</body>
+</html>

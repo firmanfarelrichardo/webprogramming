@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>XMLHttpRequest Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .loading { color: #666; font-style: italic; }
+        .error { color: red; background: #ffe6e6; padding: 10px; border-radius: 5px; }
+        .success { color: green; background: #e6ffe6; padding: 10px; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>XMLHttpRequest Demo</h1>
+    
+    <div class="container">
+        <h3>1. Load Data dengan XMLHttpRequest</h3>
+        <button onclick="loadData()">Load Users</button>
+        <button onclick="clearData()">Clear</button>
+        <div id="status"></div>
+        <div id="result"></div>
+    </div>
+    
+    <div class="container">
+        <h3>2. XMLHttpRequest dengan Error Handling</h3>
+        <button onclick="loadValidData()">Load Valid Data</button>
+        <button onclick="loadInvalidData()">Load Invalid Data</button>
+        <div id="status2"></div>
+        <div id="result2"></div>
+    </div>
+    
+    <script>
+   
+        function loadData() {
+            const statusDiv = document.getElementById('status');
+            const resultDiv = document.getElementById('result');
+            
+            statusDiv.innerHTML = '<div class="loading">⏳ Loading data...</div>';
+            resultDiv.innerHTML = '';
+            
+            const xhr = new XMLHttpRequest();
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) { // Request completed
+                    if (xhr.status === 200) { // Success
+                        try {
+                            const data = JSON.parse(xhr.responseText);
+                            displayUsers(data.users);
+                            statusDiv.innerHTML = '<div class="success">✅ ' + data.message + '</div>';
+                        } catch (e) {
+                            statusDiv.innerHTML = '<div class="error">❌ Error parsing JSON: ' + e.message + '</div>';
+                        }
+                    } else {
+                        statusDiv.innerHTML = '<div class="error">❌ HTTP Error: ' + xhr.status + '</div>';
+                    }
+                }
+            };
+            
+            xhr.onerror = function() {
+                statusDiv.innerHTML = '<div class="error">❌ Network Error occurred</div>';
+            };
+            
+            xhr.open('GET', 'data.json', true);
+            xhr.send();
+        }
+        
+        function displayUsers(users) {
+            const resultDiv = document.getElementById('result');
+            
+            let html = '<table>';
+            html += '<tr><th>ID</th><th>Name</th><th>Email</th><th>City</th></tr>';
+            
+            users.forEach(user => {
+                html += `<tr>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.city}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            resultDiv.innerHTML = html;
+        }
+        
+        function clearData() {
+            document.getElementById('status').innerHTML = '';
+            document.getElementById('result').innerHTML = '';
+        }
+        
+        function loadValidData() {
+            makeRequest('data.json', 'status2', 'result2');
+        }
+        
+        function loadInvalidData() {
+            makeRequest('nonexistent.json', 'status2', 'result2');
+        }
+        
+        function makeRequest(url, statusId, resultId) {
+            const statusDiv = document.getElementById(statusId);
+            const resultDiv = document.getElementById(resultId);
+            
+            statusDiv.innerHTML = '<div class="loading">⏳ Making request to: ' + url + '</div>';
+            resultDiv.innerHTML = '';
+            
+            const xhr = new XMLHttpRequest();
+            
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+                        displayUsers(data.users);
+                        statusDiv.innerHTML = '<div class="success">✅ Success! Status: ' + xhr.status + '</div>';
+                    } catch (e) {
+                        statusDiv.innerHTML = '<div class="error">❌ JSON Parse Error: ' + e.message + '</div>';
+                    }
+                } else {
+                    statusDiv.innerHTML = '<div class="error">❌ HTTP Error: ' + xhr.status + ' - ' + xhr.statusText + '</div>';
+                }
+            };
+            
+            xhr.onerror = function() {
+                statusDiv.innerHTML = '<div class="error">❌ Network Error: Unable to connect to server</div>';
+            };
+            
+            xhr.ontimeout = function() {
+                statusDiv.innerHTML = '<div class="error">❌ Request Timeout</div>';
+            };
+            
+            xhr.open('GET', url, true);
+            xhr.timeout = 5000; 
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
+
